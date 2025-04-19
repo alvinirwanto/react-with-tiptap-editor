@@ -13,7 +13,6 @@ import { ColumnsTableDataEvent } from "./columns-table-data-event";
 import { getPesertaMutationFn } from "@/api/admin/api-master-peserta";
 import { useDebounce } from "@/hooks/use-debounce";
 import toast from "react-hot-toast";
-import { FilterColumnTableDataEvent } from "./filter-column-table-data-event";
 import { useTableStore } from "@/stores/table-store";
 import { PiUsersFill } from "react-icons/pi";
 
@@ -137,7 +136,6 @@ export default function TableDataEvent() {
                         <Download className="h-4 w-4" />
                         Download
                     </Button>
-                    {table && <FilterColumnTableDataEvent table={table} />}
                     <Button
                         qa="button-add-peserta"
                         variant="green"

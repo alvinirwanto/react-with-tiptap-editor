@@ -13,7 +13,6 @@ import { ColumnsTableDataDeviasi } from "./columns-table-data-deviasi";
 import { getPesertaMutationFn } from "@/api/admin/api-master-peserta";
 import { useDebounce } from "@/hooks/use-debounce";
 import toast from "react-hot-toast";
-import { FilterColumnTableDataDeviasi } from "./filter-column-table-data-deviasi";
 import { useTableStore } from "@/stores/table-store";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -137,7 +136,6 @@ export default function TableDataDeviasi() {
                         <Download className="h-4 w-4" />
                         Download
                     </Button>
-                    {table && <FilterColumnTableDataDeviasi table={table} />}
                     <Button
                         qa="button-add-peserta"
                         variant="green"
