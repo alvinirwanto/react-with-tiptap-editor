@@ -4,6 +4,7 @@ interface DateInputProps {
     value?: Date
     qa_date_input?: string
     onChange: (date: Date) => void
+    isDisabledDate?: (date: Date) => boolean
 }
 
 interface DateParts {
@@ -12,7 +13,7 @@ interface DateParts {
     year: number
 }
 
-const DateInput: React.FC<DateInputProps> = ({ value, qa_date_input, onChange }) => {
+const DateInput: React.FC<DateInputProps> = ({ value, qa_date_input, onChange, isDisabledDate }) => {
     const [date, setDate] = React.useState<DateParts>(() => {
         const d = value ? new Date(value) : new Date()
         return {
@@ -52,20 +53,41 @@ const DateInput: React.FC<DateInputProps> = ({ value, qa_date_input, onChange })
             d.getDate() === newDate.day
     }
 
+    // const handleInputChange =
+    //     (field: keyof DateParts) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    //         const newValue = e.target.value ? Number(e.target.value) : ''
+    //         const isValid = typeof newValue === 'number' && validateDate(field, newValue)
+
+    //         // If the new value is valid, update the date
+    //         const newDate = { ...date, [field]: newValue }
+    //         setDate(newDate)
+
+    //         // only call onChange when the entry is valid
+    //         if (isValid) {
+    //             const selectedDate = new Date(newDate.year, newDate.month - 1, newDate.day)
+    //             if (isDisabledDate?.(selectedDate)) {
+    //                 const today = new Date()
+    //                 today.setHours(0, 0, 0, 0)
+    //                 setDate({
+    //                     day: today.getDate(),
+    //                     month: today.getMonth() + 1,
+    //                     year: today.getFullYear(),
+    //                 })
+    //                 onChange(today)
+    //             } else {
+    //                 onChange(selectedDate)
+    //             }
+    //         }
+
+    //     }
+
     const handleInputChange =
         (field: keyof DateParts) => (e: React.ChangeEvent<HTMLInputElement>) => {
             const newValue = e.target.value ? Number(e.target.value) : ''
-            const isValid = typeof newValue === 'number' && validateDate(field, newValue)
-
-            // If the new value is valid, update the date
             const newDate = { ...date, [field]: newValue }
             setDate(newDate)
-
-            // only call onChange when the entry is valid
-            if (isValid) {
-                onChange(new Date(newDate.year, newDate.month - 1, newDate.day))
-            }
         }
+
 
     const initialDate = useRef<DateParts>(date)
 
@@ -78,13 +100,35 @@ const DateInput: React.FC<DateInputProps> = ({ value, qa_date_input, onChange })
         }
 
         const newValue = Number(e.target.value)
+        const newDate = { ...date, [field]: newValue }
+
         const isValid = validateDate(field, newValue)
 
         if (!isValid) {
             setDate(initialDate.current)
+            return
+        }
+
+        const selectedDate = new Date(newDate.year, newDate.month - 1, newDate.day)
+
+        if (isDisabledDate?.(selectedDate)) {
+            const today = new Date()
+            today.setHours(0, 0, 0, 0)
+            setDate({
+                day: today.getDate(),
+                month: today.getMonth() + 1,
+                year: today.getFullYear(),
+            })
+            onChange(today)
+            initialDate.current = {
+                day: today.getDate(),
+                month: today.getMonth() + 1,
+                year: today.getFullYear(),
+            }
         } else {
-            // If the new value is valid, update the initial value
-            initialDate.current = { ...date, [field]: newValue }
+            setDate(newDate)
+            onChange(selectedDate)
+            initialDate.current = newDate
         }
     }
 

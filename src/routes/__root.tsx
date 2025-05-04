@@ -10,7 +10,7 @@ function RootComponent() {
     return (
         <React.Fragment>
             <Navbar />
-            <div className='h-full py-4 px-6 overflow-auto bg-gray-100'>
+            <div className='h-full py-4 px-6 bg-gray-100'>
                 <Outlet />
             </div>
         </React.Fragment>

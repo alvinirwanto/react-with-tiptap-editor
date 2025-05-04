@@ -13,7 +13,7 @@ export default function Chip({ message, type }: Readonly<ChipProps>) {
             case 'blue':
                 return 'bg-blue-50 text-blue-500 border-blue-100';
             case 'green':
-                return 'bg-green-50 text-green-400 border-green-100';
+                return 'bg-green-100 text-green-400 border-green-200';
             case 'red':
                 return 'bg-rose-50 text-rose-500 border-rose-100';
             default:
@@ -22,7 +22,7 @@ export default function Chip({ message, type }: Readonly<ChipProps>) {
     };
 
     return (
-        <div className={`min-w-[70px] px-5 py-[6px] border-[1px] text-center text-xs font-medium rounded-full ${getTypeClassName(type)}`}>
+        <div className={`w-full px-5 py-[8px] border-[1px] text-center text-xs font-medium rounded-sm ${getTypeClassName(type)}`}>
             {message}
         </div>
     )

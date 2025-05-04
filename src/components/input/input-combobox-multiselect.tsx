@@ -1,4 +1,4 @@
-import { ArrowUpRight, Check, ChevronsUpDown, X } from "lucide-react";
+import { ArrowUpRight, Check, ChevronsUpDown, LoaderCircle, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +38,7 @@ interface InputComboboxMultipleSelectProps<T> {
     onInputChange?: (inputValue: string) => void;
     maxVisibleBadges?: number;
     titleModal?: string;
+    showBadges?:boolean;
 }
 export default function InputComboboxMultipleSelect<T>({
     name,
@@ -53,6 +54,7 @@ export default function InputComboboxMultipleSelect<T>({
     onInputChange,
     renderLabel,
     compareFn,
+    showBadges = true,
     maxVisibleBadges = 5,
     titleModal = 'List Peserta Terpilih'
 }: Readonly<InputComboboxMultipleSelectProps<T>>) {
@@ -60,28 +62,6 @@ export default function InputComboboxMultipleSelect<T>({
     const [openCombobox, setOpenCombobox] = useState(false);
     const [inputValue, setInputValue] = useState<string>("");
     const [selectedValues, setSelectedValues] = useState<any[]>([]);
-
-    // const toggleFramework = (item: T | string, field: any) => {
-    //     setSelectedValues((current) => {
-    //         const exists = current.some((selected) =>
-    //             typeof item === "string"
-    //                 ? selected === item // Direct comparison for strings
-    //                 : compareFn?.(selected, item) // Use compareFn for objects
-    //         );
-
-    //         if (exists) {
-    //             return current.filter((selected) =>
-    //                 typeof item === "string"
-    //                     ? selected !== item
-    //                     : !compareFn?.(selected, item)
-    //             );
-    //         } else {
-    //             const updatedValues = [...current, item];
-    //             field.onChange(updatedValues);
-    //             return updatedValues;
-    //         }
-    //     });
-    // };
 
     const toggleFramework = (item: T | string, field: any) => {
         setSelectedValues((current) => {
@@ -200,8 +180,8 @@ export default function InputComboboxMultipleSelect<T>({
                                             <CommandList>
                                                 {
                                                     loading
-                                                        ? <div className="w-full !h-[100px] flex justify-center items-center">
-                                                            <div className="loader-dark"></div>
+                                                        ? <div className="w-full !h-[150px] flex justify-center items-center">
+                                                            <LoaderCircle className='animate-spin' />
                                                         </div>
                                                         : <>
                                                             <CommandEmpty>{noDataPlaceholder ?? 'Data tidak ditemukan'}</CommandEmpty>
@@ -244,7 +224,7 @@ export default function InputComboboxMultipleSelect<T>({
                                     </PopoverContent>
                                 </Popover>
                                 {
-                                    selectedValues.length > 0 && (
+                                    (selectedValues.length > 0 && showBadges) && (
                                         <div className="mt-3 max-h-24 overflow-y-auto flex flex-wrap w-full items-center">
                                             {(showAll ? selectedValues : selectedValues.slice(0, maxVisibleBadges)).map((item: any, index: number) => (
                                                 <Badge
@@ -294,7 +274,7 @@ export default function InputComboboxMultipleSelect<T>({
                                 }
 
 
-                                {/* Detail Moda */}
+                                {/* Detail Modal */}
                                 <ModalChildren
                                     isOpen={modalViewAllOpen}
                                     onClose={() => setModalViewAllOpen(false)}

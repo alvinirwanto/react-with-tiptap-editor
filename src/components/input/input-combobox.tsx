@@ -1,4 +1,4 @@
-import { Check, ChevronsUpDown, X } from "lucide-react"
+import { Check, ChevronsUpDown, LoaderCircle, Plus, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -9,6 +9,7 @@ import {
     CommandInput,
     CommandItem,
     CommandList,
+    CommandSeparator,
 } from "@/components/ui/command"
 import {
     Popover,
@@ -34,7 +35,9 @@ interface InputComboboxProps<T> {
     renderLabel: (item: T) => string;
     compareFn: (item: T, value: T | null) => boolean; // Function to compare item with the current value
     onInputChange?: (inputValue: string) => void;
-    readOnly?:boolean;
+    readOnly?: boolean;
+    addNewItem?: any;
+    addNewItemFn?: () => void;
 }
 export default function InputCombobox<T>({
     name,
@@ -51,7 +54,9 @@ export default function InputCombobox<T>({
     renderLabel,
     required,
     compareFn,
-    readOnly
+    readOnly,
+    addNewItem,
+    addNewItemFn
 }: Readonly<InputComboboxProps<T>>) {
     const [open, setOpen] = useState(false)
     const [inputValue, setInputValue] = useState('');
@@ -126,8 +131,8 @@ export default function InputCombobox<T>({
                                     >
                                         {
                                             loading
-                                                ? <div className="w-full !h-[100px] flex justify-center items-center">
-                                                    <div className="loader-dark"></div>
+                                                ? <div className="w-full !h-[150px] flex justify-center items-center">
+                                                    <LoaderCircle className='animate-spin' />
                                                 </div>
                                                 : <>
                                                     <CommandEmpty>{noDataPlaceholder ?? 'Data tidak ditemukan'}</CommandEmpty>
@@ -160,6 +165,20 @@ export default function InputCombobox<T>({
                                                                 }
                                                             </CommandItem>
                                                         ))}
+                                                        {
+                                                            addNewItem && (
+                                                                <>
+                                                                    <CommandSeparator className="my-1" />
+                                                                    <CommandItem
+                                                                        onSelect={addNewItemFn}
+                                                                        className="cursor-pointer"
+                                                                    >
+                                                                        <Plus className='h-4 w-4 mr-2' />
+                                                                        Tambah Baru
+                                                                    </CommandItem>
+                                                                </>
+                                                            )
+                                                        }
 
                                                         <div className="p-1 fixed top-1 right-2">
                                                             <Button

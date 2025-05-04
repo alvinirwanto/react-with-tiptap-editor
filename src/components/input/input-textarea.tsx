@@ -1,5 +1,5 @@
 import { Textarea } from '../ui/textarea'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { cn } from '@/lib/utils';
 import { Control } from 'react-hook-form';
 import { useEffect, useRef } from 'react';
@@ -18,7 +18,8 @@ interface InputTextareaProps {
     shouldTrigger?: boolean;
     pathTriggerFieldTarget?: any;
     watch?: any;
-    readOnly?:boolean;
+    readOnly?: boolean;
+    description?: string;
 }
 export default function InputTextarea({
     control,
@@ -34,7 +35,8 @@ export default function InputTextarea({
     shouldTrigger = false,
     pathTriggerFieldTarget,
     watch,
-    readOnly
+    readOnly,
+    description
 }: Readonly<InputTextareaProps>) {
 
     const watchedValue = watch ? watch(name) : undefined;
@@ -68,6 +70,15 @@ export default function InputTextarea({
             render={({ field, fieldState }) => (
                 <FormItem className={cn('w-full', label ? "space-y-1" : "space-y-0")}>
                     <FormLabel>{label}</FormLabel>
+                    {
+                        description && (
+                            <div className='mt-1'>
+                                <FormDescription className='text-xs'>
+                                    {description}
+                                </FormDescription>
+                            </div>
+                        )
+                    }
                     <FormControl>
                         <Textarea
                             qa-textarea={qa}

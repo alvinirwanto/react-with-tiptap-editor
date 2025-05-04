@@ -17,6 +17,9 @@ import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
+const EventPengajuanEventLazyImport = createFileRoute(
+  '/event/pengajuan-event',
+)()
 const EventListLazyImport = createFileRoute('/event/list')()
 const DeviasiUsulanDeviasiLazyImport = createFileRoute(
   '/deviasi/usulan-deviasi',
@@ -30,6 +33,14 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const EventPengajuanEventLazyRoute = EventPengajuanEventLazyImport.update({
+  id: '/event/pengajuan-event',
+  path: '/event/pengajuan-event',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/event/pengajuan-event.lazy').then((d) => d.Route),
+)
 
 const EventListLazyRoute = EventListLazyImport.update({
   id: '/event/list',
@@ -83,6 +94,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventListLazyImport
       parentRoute: typeof rootRoute
     }
+    '/event/pengajuan-event': {
+      id: '/event/pengajuan-event'
+      path: '/event/pengajuan-event'
+      fullPath: '/event/pengajuan-event'
+      preLoaderRoute: typeof EventPengajuanEventLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -93,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/deviasi/list': typeof DeviasiListLazyRoute
   '/deviasi/usulan-deviasi': typeof DeviasiUsulanDeviasiLazyRoute
   '/event/list': typeof EventListLazyRoute
+  '/event/pengajuan-event': typeof EventPengajuanEventLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -100,6 +119,7 @@ export interface FileRoutesByTo {
   '/deviasi/list': typeof DeviasiListLazyRoute
   '/deviasi/usulan-deviasi': typeof DeviasiUsulanDeviasiLazyRoute
   '/event/list': typeof EventListLazyRoute
+  '/event/pengajuan-event': typeof EventPengajuanEventLazyRoute
 }
 
 export interface FileRoutesById {
@@ -108,19 +128,31 @@ export interface FileRoutesById {
   '/deviasi/list': typeof DeviasiListLazyRoute
   '/deviasi/usulan-deviasi': typeof DeviasiUsulanDeviasiLazyRoute
   '/event/list': typeof EventListLazyRoute
+  '/event/pengajuan-event': typeof EventPengajuanEventLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/deviasi/list' | '/deviasi/usulan-deviasi' | '/event/list'
+  fullPaths:
+    | '/'
+    | '/deviasi/list'
+    | '/deviasi/usulan-deviasi'
+    | '/event/list'
+    | '/event/pengajuan-event'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/deviasi/list' | '/deviasi/usulan-deviasi' | '/event/list'
+  to:
+    | '/'
+    | '/deviasi/list'
+    | '/deviasi/usulan-deviasi'
+    | '/event/list'
+    | '/event/pengajuan-event'
   id:
     | '__root__'
     | '/'
     | '/deviasi/list'
     | '/deviasi/usulan-deviasi'
     | '/event/list'
+    | '/event/pengajuan-event'
   fileRoutesById: FileRoutesById
 }
 
@@ -129,6 +161,7 @@ export interface RootRouteChildren {
   DeviasiListLazyRoute: typeof DeviasiListLazyRoute
   DeviasiUsulanDeviasiLazyRoute: typeof DeviasiUsulanDeviasiLazyRoute
   EventListLazyRoute: typeof EventListLazyRoute
+  EventPengajuanEventLazyRoute: typeof EventPengajuanEventLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -136,6 +169,7 @@ const rootRouteChildren: RootRouteChildren = {
   DeviasiListLazyRoute: DeviasiListLazyRoute,
   DeviasiUsulanDeviasiLazyRoute: DeviasiUsulanDeviasiLazyRoute,
   EventListLazyRoute: EventListLazyRoute,
+  EventPengajuanEventLazyRoute: EventPengajuanEventLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -151,7 +185,8 @@ export const routeTree = rootRoute
         "/",
         "/deviasi/list",
         "/deviasi/usulan-deviasi",
-        "/event/list"
+        "/event/list",
+        "/event/pengajuan-event"
       ]
     },
     "/": {
@@ -165,6 +200,9 @@ export const routeTree = rootRoute
     },
     "/event/list": {
       "filePath": "event/list.lazy.tsx"
+    },
+    "/event/pengajuan-event": {
+      "filePath": "event/pengajuan-event.lazy.tsx"
     }
   }
 }

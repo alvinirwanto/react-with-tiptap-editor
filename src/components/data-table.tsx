@@ -48,6 +48,8 @@ interface DataTableProps<TData extends object> {
     total_pages?: number;
     qa: string;
     table_type?: string;
+    filtering?: any;
+    setFiltering?: any;
 }
 
 export default function DataTable<TData extends object>({
@@ -65,10 +67,12 @@ export default function DataTable<TData extends object>({
     setPage,
     total_rows,
     total_pages,
-    table_type
+    table_type,
+    filtering,
+    setFiltering
 }: Readonly<DataTableProps<TData>>) {
 
-    const [filtering, setFiltering] = useState('');
+    // const [filtering, setFiltering] = useState('');
     const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({
         left: leftColumnPinning,
         right: rightColumnPinning,
@@ -144,7 +148,7 @@ export default function DataTable<TData extends object>({
             {
                 isLoading
                     ? <div className='h-[calc(100vh-250px)]'>
-                        <div className='flex items-center gap-4 bg-gray-100 p-3 rounded'>
+                        <div className='flex items-center gap-4 bg-bg-table p-3 rounded'>
                             {Array.from({ length: 7 }).map((_, index) => (
                                 <Skeleton key={index + 1} className="w-full h-[25px] rounded-md bg-gray-300" />
                             ))}
@@ -172,7 +176,7 @@ export default function DataTable<TData extends object>({
                                 ? 'h-[calc(100vh-280px)]'
                                 : table_type === 'sub-title'
                                     ? 'h-[calc(100vh-320px)]'
-                                    : 'min-h-[300px] max-h-[400px]',
+                                    : 'min-h-[330px] max-h-[400px]',
                             'p-0 w-full overflow-auto')}
                         >
                             <Table
@@ -199,7 +203,7 @@ export default function DataTable<TData extends object>({
                                                                 style={{
                                                                     ...getCommonPinningStyles({ column: header.column }),
                                                                 }}
-                                                                className='!bg-gray-bg px-1 py-3 font-bold'
+                                                                className='!bg-bg-table px-1 py-3 font-bold'
                                                             >
                                                                 {
                                                                     header.isPlaceholder

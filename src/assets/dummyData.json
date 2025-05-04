@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Contoh 1",
+        "ket": "Keterangan 1",
+        "nama_pt": "Perusahaan 1",
+        "no_hp": "8874028402048",
+        "anggaran": 30000000
+    },
+    {
+        "id": 2,
+        "name": "Contoh 2",
+        "ket": "Keterangan 2",
+        "nama_pt": "Perusahaan 2",
+        "no_hp": "8874023202048",
+        "anggaran": 20000000
+    },
+    {
+        "id": 3,
+        "name": "Contoh 3",
+        "ket": "Keterangan 3",
+        "nama_pt": "Perusahaan 3",
+        "no_hp": "8474068402048",
+        "anggaran": 10000000
+    }
+]

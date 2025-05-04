@@ -13,10 +13,15 @@ import { ColumnsTableDataEvent } from "./columns-table-data-event";
 import { getPesertaMutationFn } from "@/api/admin/api-master-peserta";
 import { useDebounce } from "@/hooks/use-debounce";
 import toast from "react-hot-toast";
+import { FilterColumnTableDataEvent } from "./filter-column-table-data-event";
 import { useTableStore } from "@/stores/table-store";
 import { PiUsersFill } from "react-icons/pi";
+import { useNavigate } from "@tanstack/react-router";
+import TitlePage from "@/components/title-page";
 
 export default function TableDataEvent() {
+
+    const navigate = useNavigate()
 
     const form = useForm({});
 
@@ -111,10 +116,14 @@ export default function TableDataEvent() {
 
     return (
         <div className="flex flex-col gap-3 w-full h-full">
-            <div className="flex items-center space-x-2">
-                <PiUsersFill className='text-3xl text-blue-pnm' />
-                <h2 className="font-bold text-blue-pnm text-[17px] mt-1">Verifikasi Event</h2>
-            </div>
+            <TitlePage
+                title="Verifikasi Event"
+                tag="h2"
+                size="md"
+                prefix={
+                    <PiUsersFill className='text-3xl text-blue-pnm' />
+                }
+            />
             <div className="w-full flex items-center justify-between">
                 <div className="w-[400px]">
                     <Form {...form}>
@@ -136,10 +145,12 @@ export default function TableDataEvent() {
                         <Download className="h-4 w-4" />
                         Download
                     </Button>
+                    {table && <FilterColumnTableDataEvent table={table} />}
                     <Button
                         qa="button-add-peserta"
                         variant="green"
                         className="flex items-center gap-2 w-[170px]"
+                        onClick={() => navigate({ to: '/event/pengajuan-event' })}
                     >
                         <Plus className="h-5 w-5" />
                         Tambah Event

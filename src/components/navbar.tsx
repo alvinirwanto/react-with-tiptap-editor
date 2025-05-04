@@ -51,6 +51,20 @@ export default function Navbar() {
             ]
         },
         {
+            name: 'Deviasi',
+            link: '',
+            child: [
+                {
+                    name: 'List Deviasi',
+                    link: '/deviasi/list'
+                },
+                {
+                    name: 'Approval Deviasi',
+                    link: '/deviasi'
+                }
+            ]
+        },
+        {
             name: 'Event',
             link: '',
             child: [
@@ -66,20 +80,6 @@ export default function Navbar() {
                     name: 'Persetujuan Pusat Event',
                     link: '/event/persetujuan-pusat'
                 },
-            ]
-        },
-        {
-            name: 'Deviasi',
-            link: '',
-            child: [
-                {
-                    name: 'List Deviasi',
-                    link: '/deviasi/list'
-                },
-                {
-                    name: 'Approval Deviasi',
-                    link: '/deviasi'
-                }
             ]
         },
     ]

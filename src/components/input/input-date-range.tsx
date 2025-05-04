@@ -13,7 +13,7 @@ export interface DateRangePickerProps {
     /** Click handler for applying the updates from DateRangePicker. */
     onUpdate?: (values: { range: DateRange }) => void
     /** Initial value for start date */
-    initialDateFrom?: Date | string
+    initialDateFrom: Date | string | undefined
     /** Initial value for end date */
     initialDateTo?: Date | string
     /** Initial value for start date for compare */
@@ -47,27 +47,48 @@ const formatDate = (date: Date, locale: string = 'en-GB'): string => {
     })
 }
 
-const getDateAdjustedForTimezone = (dateInput: Date | string): Date => {
+// const getDateAdjustedForTimezone = (dateInput: Date | string): Date => {
+//     if (typeof dateInput === 'string') {
+//         // Split the date string to get year, month, and day parts
+//         const parts = dateInput.split('-').map((part) => parseInt(part, 10))
+//         // Create a new Date object using the local timezone
+//         // Note: Month is 0-indexed, so subtract 1 from the month part
+//         const date = new Date(parts[0], parts[1] - 1, parts[2])
+//         return date
+//     } else {
+//         // If dateInput is already a Date object, return it directly
+//         return dateInput
+//     }
+// }
+
+const getDateAdjustedForTimezone = (dateInput: Date | string, isToDate = false): Date => {
+    let date: Date;
+
     if (typeof dateInput === 'string') {
-        // Split the date string to get year, month, and day parts
-        const parts = dateInput.split('-').map((part) => parseInt(part, 10))
-        // Create a new Date object using the local timezone
-        // Note: Month is 0-indexed, so subtract 1 from the month part
-        const date = new Date(parts[0], parts[1] - 1, parts[2])
-        return date
+        const parts = dateInput.split('-').map((part) => parseInt(part, 10));
+        date = new Date(parts[0], parts[1] - 1, parts[2]);
     } else {
-        // If dateInput is already a Date object, return it directly
-        return dateInput
+        date = new Date(dateInput);
     }
-}
+
+    // 🔥 Fix: set time to noon (safe from DST/UTC shifts)
+    if (isToDate) {
+        date.setHours(12, 0, 0, 0);
+    } else {
+        date.setHours(0, 0, 0, 0);
+    }
+
+    return date;
+};
+
 
 interface DateRange {
-    from: Date
+    from: Date | undefined
     to: Date | undefined
 }
 
 export default function InputDateRange({
-    initialDateFrom = new Date(new Date().setHours(0, 0, 0, 0)),
+    initialDateFrom,
     initialDateTo,
     onUpdate,
     isReset,
@@ -86,12 +107,21 @@ export default function InputDateRange({
 }: Readonly<DateRangePickerProps>): JSX.Element {
     const [isOpen, setIsOpen] = useState(false)
 
+    // const normalizeDate = (date?: Date | string) => {
+    //     if (!date) return undefined
+    //     const d = new Date(date)
+    //     d.setHours(0, 0, 0, 0)
+    //     return d
+    // }
+
+    // const normalizedFrom = normalizeDate(initialDateFrom)
+    // const normalizedTo = normalizeDate(initialDateTo)
+
     const [range, setRange] = useState<DateRange>({
-        from: getDateAdjustedForTimezone(initialDateFrom),
-        to: initialDateTo
-            ? getDateAdjustedForTimezone(initialDateTo)
-            : getDateAdjustedForTimezone(initialDateFrom)
+        from: initialDateFrom ? getDateAdjustedForTimezone(initialDateFrom, true) : undefined,
+        to: initialDateTo ? getDateAdjustedForTimezone(initialDateTo, true) : undefined,
     })
+
 
     // Refs to store the values of range and rangeCompare when the date picker is opened
     const openedRangeRef = useRef<DateRange | undefined>(undefined)
@@ -117,14 +147,14 @@ export default function InputDateRange({
         setRange({
             from:
                 typeof initialDateFrom === 'string'
-                    ? getDateAdjustedForTimezone(initialDateFrom)
+                    ? getDateAdjustedForTimezone(initialDateFrom, true)
                     : initialDateFrom,
             to: initialDateTo
                 ? typeof initialDateTo === 'string'
-                    ? getDateAdjustedForTimezone(initialDateTo)
+                    ? getDateAdjustedForTimezone(initialDateTo, true)
                     : initialDateTo
                 : typeof initialDateFrom === 'string'
-                    ? getDateAdjustedForTimezone(initialDateFrom)
+                    ? getDateAdjustedForTimezone(initialDateFrom, true)
                     : initialDateFrom
         })
     }
@@ -132,11 +162,13 @@ export default function InputDateRange({
     // Helper function to check if two date ranges are equal
     const areRangesEqual = (a?: DateRange, b?: DateRange): boolean => {
         if (!a || !b) return a === b // If either is undefined, return true if both are undefined
-        return (
-            a.from.getTime() === b.from.getTime() &&
-            (!a.to || !b.to || a.to.getTime() === b.to.getTime())
-        )
+
+        const fromEqual = a.from?.getTime() === b.from?.getTime()
+        const toEqual = a.to?.getTime() === b.to?.getTime()
+
+        return fromEqual && toEqual
     }
+
 
     useEffect(() => {
         if (isOpen) {
@@ -145,17 +177,17 @@ export default function InputDateRange({
     }, [isOpen])
 
     useEffect(() => {
-        // if (isUpdate) {
-        const newRange = {
-            from: getDateAdjustedForTimezone(initialDateFrom),
-            to: initialDateTo
-                ? getDateAdjustedForTimezone(initialDateTo)
-                : getDateAdjustedForTimezone(initialDateFrom)
-        };
-
-        setRange(newRange);
-        // }
+        if (initialDateFrom) {
+            const newRange = {
+                from: getDateAdjustedForTimezone(initialDateFrom, true),
+                to: initialDateTo
+                    ? getDateAdjustedForTimezone(initialDateTo, true)
+                    : undefined
+            };
+            setRange(newRange);
+        }
     }, [initialDateFrom, initialDateTo]);
+
 
     useEffect(() => {
         if (isReset) {
@@ -163,14 +195,14 @@ export default function InputDateRange({
             setRange({
                 from:
                     typeof initialDateFrom === 'string'
-                        ? getDateAdjustedForTimezone(initialDateFrom)
+                        ? getDateAdjustedForTimezone(initialDateFrom, true)
                         : initialDateFrom,
                 to: initialDateTo
                     ? typeof initialDateTo === 'string'
-                        ? getDateAdjustedForTimezone(initialDateTo)
+                        ? getDateAdjustedForTimezone(initialDateTo, true)
                         : initialDateTo
                     : typeof initialDateFrom === 'string'
-                        ? getDateAdjustedForTimezone(initialDateFrom)
+                        ? getDateAdjustedForTimezone(initialDateFrom, true)
                         : initialDateFrom
             })
 
@@ -193,6 +225,13 @@ export default function InputDateRange({
         }
     }, [showDate, setIsShowDate])
 
+    useEffect(() => {
+        if ((initialDateFrom || initialDateTo) && !showDate) {
+            setShowDate(true);
+        }
+    }, [initialDateFrom, initialDateTo]);
+
+
     return (
         <FormField
             control={control}
@@ -205,6 +244,7 @@ export default function InputDateRange({
                     field.onChange(range);
                     // }
                 }, [range]);
+
                 return (
                     <FormItem className={cn('w-full', label ? "space-y-1" : "space-y-0")}>
                         <FormLabel>{label}</FormLabel>
@@ -224,6 +264,7 @@ export default function InputDateRange({
                                         qa='button-date-range-trigger'
                                         disabled={disabled}
                                         variant="outline"
+                                        type='button'
                                         qa-date-range-trigger={qa}
                                         className={cn(
                                             fieldState.error && "bg-rose-100 border-rose-500",
@@ -237,14 +278,18 @@ export default function InputDateRange({
                                                 <p className='mt-[2px] font-normal'>
                                                     {
                                                         field.value && showDate
-                                                            ? `${formatDate(range.from, locale)} ${range.to != null && ' - ' + formatDate(range.to, locale)}`
-                                                            : isUpdate ? `${formatDate(range.from, locale)} ${range.to != null && ' - ' + formatDate(range.to, locale)}`
+                                                            ? range.from
+                                                                ? `${formatDate(range.from, locale)}${range.to ? ' - ' + formatDate(range.to, locale) : ''}`
+                                                                : 'Pilih Tanggal'
+                                                            : isUpdate && range.from
+                                                                ? `${formatDate(range.from, locale)}${range.to ? ' - ' + formatDate(range.to, locale) : ''}`
                                                                 : 'Pilih Tanggal'
                                                     }
                                                 </p>
+
                                             </div>
                                         </div>
-                                        <ChevronDown className={`h-5 w-5 shrink-0 opacity-60 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                                        <ChevronDown className={`h-4 w-4 shrink-0 opacity-60 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
                                     </Button>
                                 </PopoverTrigger>
 
@@ -268,17 +313,20 @@ export default function InputDateRange({
                                                                 <DateInput
                                                                     qa_date_input={qa}
                                                                     value={range.from}
+                                                                    isDisabledDate={disabledDate}
                                                                     onChange={(date: any) => {
-                                                                        const toDate =
-                                                                            range.to == null || date > range.to ? date : range.to
+                                                                        const adjustedFrom = getDateAdjustedForTimezone(date, true); // 👈 adjust
+                                                                        const toDate = !range.to || adjustedFrom > range.to ? adjustedFrom : range.to;
+
                                                                         setRange((prevRange) => ({
                                                                             ...prevRange,
-                                                                            from: date,
-                                                                            to: toDate
-                                                                        }))
-                                                                        field.onChange({ ...range, from: date });
+                                                                            from: adjustedFrom,
+                                                                            to: toDate,
+                                                                        }));
+                                                                        field.onChange({ ...range, from: adjustedFrom, to: toDate });
                                                                     }}
                                                                 />
+
                                                             </div>
                                                             <div className='relative h-full flex justify-center px-2'>
                                                                 <div className="absolute top-0">-</div>
@@ -288,16 +336,21 @@ export default function InputDateRange({
                                                                 <DateInput
                                                                     qa_date_input={qa}
                                                                     value={range.to}
+                                                                    isDisabledDate={disabledDate}
                                                                     onChange={(date: any) => {
-                                                                        const fromDate = date < range.from ? date : range.from
+                                                                        const adjustedTo = getDateAdjustedForTimezone(date, true); // 👈 adjust
+                                                                        const fromDate = !range.from || adjustedTo < range.from ? adjustedTo : range.from;
+
                                                                         setRange((prevRange) => ({
                                                                             ...prevRange,
                                                                             from: fromDate,
-                                                                            to: date
-                                                                        }))
-                                                                        field.onChange({ ...range, from: date });
+                                                                            to: adjustedTo,
+                                                                        }));
+                                                                        field.onChange({ ...range, from: fromDate, to: adjustedTo });
                                                                     }}
                                                                 />
+
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -308,19 +361,15 @@ export default function InputDateRange({
                                                         mode="range"
                                                         onSelect={(value: { from?: Date, to?: Date } | undefined) => {
                                                             if (value?.from) {
-                                                                onChange(value); // Call the onChange from react-hook-form to update form state
-                                                                setRange({ from: value.from, to: value?.to })
+                                                                const adjustedFrom = getDateAdjustedForTimezone(value.from, true);
+                                                                const adjustedTo = value?.to ? getDateAdjustedForTimezone(value.to, true) : undefined;
+
+                                                                onChange({ from: adjustedFrom, to: adjustedTo });
+                                                                setRange({ from: adjustedFrom, to: adjustedTo });
                                                             }
                                                         }}
+
                                                         disabled={(date) => disabledDate ? disabledDate(date) : false}
-                                                        // disabled={(date) => {
-                                                        //     const isBefore = isBeforeDisabled && date < new Date(isBeforeDisabled);
-                                                        //     // const isBefore2024 = date < new Date("2024-01-01");
-                                                        //     // const isFutureDate = date > new Date();
-                                                        //     // return isBefore2024 || isFutureDate;
-                                                        //     // return isFutureDate
-                                                        //     return isBefore
-                                                        // }}
                                                         selected={range}
                                                         numberOfMonths={isSmallScreen ? 1 : 2}
                                                         defaultMonth={
@@ -344,6 +393,7 @@ export default function InputDateRange({
                                             }}
                                             variant="ghost"
                                             className='h-fit'
+                                            type='button'
                                         >
                                             Cancel
                                         </Button>
@@ -358,6 +408,7 @@ export default function InputDateRange({
                                                 }
                                             }}
                                             className='h-fit'
+                                            type='button'
                                         >
                                             Update
                                         </Button>

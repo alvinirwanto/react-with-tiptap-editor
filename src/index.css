@@ -20,7 +20,6 @@ body {
   font-family: "Nunito Sans", serif !important;
 }
 
-
 /* Customize the native time picker icon */
 input[type="time"]::-webkit-calendar-picker-indicator {
   background-size: 16px 16px;
@@ -75,10 +74,13 @@ input[type="number"] {
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1600px;
+  --breakpoint-3xl: 2000px;
   --breakpoint-h-mini: 700px;
 
   --color-blue-pnm: #043873;
+  --color-blue-pnm-2: #1B89BB;
   --color-gray-bg: #FAFAFA;
+  --color-bg-table: #F4F7FE;
   --color-green-pnm: #75C142;
 
   --radius-sm: calc(var(--radius) - 4px);

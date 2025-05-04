@@ -41,14 +41,14 @@ export default function ModalChildren({
                 onOpenAutoFocus={(e) => e.preventDefault()}
                 showClose
                 noCloseBackground={noCloseBackground}
-                className="flex flex-col !w-fit min-w-[900px] max-w-[1450px] max-h-[570px] bg-white py-4 px-6 overflow-visible pointer-events-auto"
+                className="flex flex-col !w-fit min-w-[700px] max-w-[1450px] min-h-[300px] max-h-[570px] bg-white py-4 px-6 overflow-visible pointer-events-auto"
             >
 
                 {(title || description) && (
-                    <div className="flex flex-col gap-1 pt-4 rounded-tl-lg rounded-tr-lg">
+                    <div className="flex flex-col gap-1 pt-4 rounded-tl-lg rounded-tr-lg w-full">
                         {title && <DialogTitle className="text-2xl font-bold">{title}</DialogTitle>}
                         {description && <p className="text-[14px] text-slate-500/90">{description}</p>}
-                        <hr className='border border-blue-500 mt-3' />
+                        {/* <hr className='border border-blue-500 mt-3' /> */}
                     </div>
                 )}
 
@@ -56,7 +56,7 @@ export default function ModalChildren({
                     <DialogDescription>Hidden Title</DialogDescription>
                 </VisuallyHidden>
                 
-                <div className="overflow-auto my-4 py-2 pl-[1px] pr-2">
+                <div className="h-full overflow-auto my-4 pl-[1px] w-full">
                     {children}
                 </div>
             </DialogContent>

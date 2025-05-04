@@ -1,71 +1,52 @@
 import API from "@/lib/axios-client";
 
-export const getUserSearchFn = async (query: string) => {
-    const response = await API.get(`/master/karyawan-search?search=${query}`);
+export const getAkademiSearchFn = async (query: string) => {
+    const response = await API.get(`/master/akademi?search=${query}`);
     return response?.data || [];
 };
 
-export const getLokasiSearchFn = async () => {
-    const response = await API.get(`/master/lokasi`);
+export const getBiayaAkomodasiKonsumsiSearchFn = async () => {
+    const response = await API.get(`/master/biaya-akomodasi-konsumsi`);
     return response?.data || [];
 };
 
-export const getRoleSearchFn = async () => {
-    const response = await API.get(`/master/role`);
+export const getBiayaLainSearchFn = async () => {
+    const response = await API.get(`/master/biaya-lain`);
     return response?.data || [];
 };
 
-export const getNamaUjianSearchFn = async (query: string) => {
-    const response = await API.get(`/master/nama-ujian?parent-ujian=${query}`);
+export const getLokasiKerjaSearchFn = async (query: string) => {
+    const response = await API.get(`/master/lokasi-kerja?search=${query}`);
     return response?.data || [];
 };
 
-export const getPerusahaanSearchFn = async () => {
-    const response = await API.get(`/master/perusahaan`);
+export const getTipeTrainerSearchFn = async (query: string) => {
+    const response = await API.get(`/master/tipe-trainer?search=${query}`);
     return response?.data || [];
 };
 
-export const getUnitKerjaSearchFn = async (query: string) => {
-    const response = await API.get(`/master/unit-kerja?search=${query}`);
+export const getUnitSatuanSearchFn = async () => {
+    const response = await API.get(`/master/unit-satuan`);
     return response?.data || [];
 };
 
-export const getPosisiSearchFn = async (query: string) => {
-    const response = await API.get(`/master/posisi?search=${query}`);
+export const getNamaKaryawanSearchFn = async (query: string) => {
+    const response = await API.get(`/master-user/karyawan-search?search=${query}`);
     return response?.data || [];
 };
 
-export const getKategoriUjianSearchFn = async () => {
-    const response = await API.get(`/master/kategori-ujian`);
+export const getKategoriPelatihanSearchFn = async (id_lokasi_kerja: string, query: string) => {
+    const response = await API.get(`/master/${id_lokasi_kerja}/kategori-pelatihan?search=${query}`);
     return response?.data || [];
 };
 
-export const getParentUjianSearchFn = async () => {
-    const response = await API.get(`/master/parent-ujian`);
+export const getSubKategoriPelatihanSearchFn = async (id_kategori: number, query: string) => {
+    const response = await API.get(`/master/${id_kategori}/sub-kategori-pelatihan?search=${query}`);
     return response?.data || [];
 };
 
-export const getModelKepribadianSearchFn = async () => {
-    const response = await API.get(`/master/model-test-kepribadian`);
-    return response?.data || [];
-};
 
-export const getPesertaSearchFn = async (query: string) => {
-    const response = await API.get(`/master/peserta?search=${query}`);
-    return response?.data?.data || [];
-};
-
-export const getPesertaActiveSearchFn = async (query: string) => {
-    const response = await API.get(`/master/peserta-search?search=${query}`);
-    return response?.data?.data || [];
-};
-
-export const getTujuanUjianSearchFn = async () => {
-    const response = await API.get(`/master/tujuan-ujian`);
-    return response?.data || [];
-};
-
-export const getUjianListKategoriSearchFn = async () => {
-    const response = await API.get(`/master/ujian-list-kategori`);
+export const getTrainerSearchFn = async (id_tipe_trainer: number, query: string) => {
+    const response = await API.get(`/master/${id_tipe_trainer}/trainer?search=${query}`);
     return response?.data || [];
 };

@@ -95,15 +95,15 @@ const extensions = [
         },
     }),
     Link,
-    Image.configure({
-        upload: (files: File) => {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    resolve(URL.createObjectURL(files))
-                }, 500)
-            })
-        },
-    }),
+    // Image.configure({
+    //     upload: (files: File) => {
+    //         return new Promise((resolve) => {
+    //             setTimeout(() => {
+    //                 resolve(URL.createObjectURL(files))
+    //             }, 500)
+    //         })
+    //     },
+    // }),
     SlashCommand,
     HorizontalRule,
     Code.configure({
@@ -150,11 +150,13 @@ function debounce(func: any, wait: number) {
 function Editor({
     value,
     onChange,
-    fieldState
+    fieldState,
+    content
 }: Readonly<{
     value: string;
     onChange: (value: string) => void;
     fieldState: any;
+    content?: string;
 }>) {
     const refEditor = useRef<any>(null);
 
@@ -176,7 +178,7 @@ function Editor({
             <RcTiptapEditor
                 ref={refEditor}
                 output='html'
-                content={value}
+                content={content || value}
                 onChangeContent={onValueChange}
                 extensions={extensions}
                 disabled={disable}

@@ -6,7 +6,7 @@ export default function useDebouncedState(initialValue: string, delay = 500) {
 
     useEffect(() => {
         debounceRef.current = setTimeout(() => {
-            setValue((prev) => prev || "a"); // Ensure 'a' is set if value is empty
+            setValue((prev) => prev || ""); // Ensure 'a' is set if value is empty
         }, delay);
 
         return () => {
@@ -17,7 +17,7 @@ export default function useDebouncedState(initialValue: string, delay = 500) {
     const setDebouncedValue = (newValue: string) => {
         if (debounceRef.current) clearTimeout(debounceRef.current);
         debounceRef.current = setTimeout(() => {
-            setValue(newValue || "a");
+            setValue(newValue || "");
         }, delay);
     };
 

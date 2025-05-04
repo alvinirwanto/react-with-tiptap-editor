@@ -20,13 +20,22 @@ export const schemaUsulanDeviasi = yup.object().shape({
         .required('Kategori Pelatihan harus diisi.')
         .typeError('Kategori Pelatihan harus diisi.'),
 
-    sub_pelatihan: yup.object()
+    sub_kategori_pelatihan: yup.object()
         .required('Sub Pelatihan harus diisi.')
         .typeError('Sub Pelatihan harus diisi.'),
 
-    tanggal_pelaksanaan: yup.date()
-        .required('Tanggal Pelaksanaan harus diisi.')
-        .typeError('Tanggal Pelaksanaan harus diisi.'),
+    tanggal_pelaksanaan: yup
+        .object({
+            from: yup.date().nullable(),
+            to: yup.date().nullable(),
+        })
+        .test(
+            'both-required',
+            'Tanggal Pelaksanaan harus diisi!',
+            (value) => !!value?.from && !!value?.to
+        )
+        .required('Tanggal Pelaksanaan harus diisi!')
+        .typeError('Tanggal Pelaksanaan harus diisi'),
 
     tempat_pelaksanaan: yup.string()
         .required('Tempat Pelaksanaan harus diisi.')
@@ -59,7 +68,7 @@ export const schemaUsulanDeviasi = yup.object().shape({
         .test('not-empty', 'Memo harus diisi.', (value) => {
             return !!value && value.trim() !== '';
         })
-        .required('Memo harus diisi.'),      
+        .required('Memo harus diisi.'),
 
     upload_file: yup
         .mixed()

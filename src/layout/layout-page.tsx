@@ -1,4 +1,5 @@
 import { slideIn } from "@/lib/animation";
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { CircleArrowLeft } from "lucide-react";
 
@@ -6,12 +7,16 @@ interface LayoutPageProps {
     isBack?: boolean;
     childrenHead?: React.ReactNode;
     children: React.ReactNode;
+    className?: string;
+    classNameChildren?: string;
 }
 
 export default function LayoutPage({
     isBack,
     childrenHead,
-    children
+    children,
+    className,
+    classNameChildren
 }: Readonly<LayoutPageProps>) {
 
     const handleBackClick = () => {
@@ -20,7 +25,7 @@ export default function LayoutPage({
 
 
     return (
-        <div className="flex flex-col gap-2 z-20 relative h-[calc(100vh-92px)] overflow-auto">
+        <div className="flex flex-col gap-2 z-20 relative h-[calc(100vh-92px)]">
             {
                 childrenHead && (
                     <motion.div
@@ -41,14 +46,26 @@ export default function LayoutPage({
                     </motion.div>
                 )
             }
+            {/* <motion.div
+                variants={slideIn({ direction: 'up', duration: 0.35, delay: 0.1, opacity: 1 })}
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                className={cn('w-full h-full bg-white rounded-md p-4 overflow-auto', className)}
+            >
+                {children}
+            </motion.div> */}
+
             <motion.div
                 variants={slideIn({ direction: 'up', duration: 0.35, delay: 0.1, opacity: 1 })}
                 initial="initial"
                 animate="enter"
                 exit="exit"
-                className="w-full h-full bg-white rounded-md p-4 overflow-auto"
+                className={cn('w-full h-full rounded-md bg-white flex items-center justify-center overflow-hidden p-1.5', className)}
             >
-                {children}
+                <div className={cn("bg-transparent w-[calc(100%-16px)] h-[calc(100%-16px)] overflow-auto", classNameChildren)}>
+                    {children}
+                </div>
             </motion.div>
         </div>
     )

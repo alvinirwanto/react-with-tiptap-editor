@@ -42,7 +42,7 @@ export function ColumnsTableDataDeviasi(refetch: () => void): ColumnDef<DataProp
             },
         },
         {
-            header: 'Perihal',
+            header: 'Username',
             accessorKey: 'perihal',
             size: 130,
             meta: {
@@ -65,15 +65,6 @@ export function ColumnsTableDataDeviasi(refetch: () => void): ColumnDef<DataProp
             size: 150,
             meta: {
                 label: 'Kategori Pelatihan',
-                active: true
-            },
-        },
-        {
-            header: 'Keterangan',
-            accessorKey: 'keterangan',
-            size: 150,
-            meta: {
-                label: 'Keterangan',
                 active: true
             },
         },

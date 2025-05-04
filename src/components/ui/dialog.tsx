@@ -52,17 +52,17 @@ const DialogContent = React.forwardRef<
         <DialogPrimitive.Content
             ref={ref}
             className={cn(
-                "fixed min-h-[400px] left-[50%] top-[50%] z-[300] grid w-[90%] xl:w-full translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+                "fixed min-h-[400px] left-[50%] top-[50%] z-[300] grid w-[90%] xl:w-full translate-x-[-50%] translate-y-[-50%] border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-bottom-1/2 data-[state=open]:slide-in-from-bottom-1/2 sm:rounded-sm",
                 isInformation ? 'p-3' : 'p-6',
                 className
-            )}
+            )}  
             {...props}
         >
             {children}
             {
                 showClose && (
                     <DialogPrimitive.Close className={cn(
-                        'absolute ring-offset-background transition-opacity h-6 w-6 flex justify-center items-center bg-rose-500 text-white opacity-70 hover:opacity-100 rounded-lg focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground',
+                        'cursor-pointer absolute ring-offset-background transition-opacity h-6 w-6 flex justify-center items-center bg-rose-500 text-white opacity-70 hover:opacity-100 rounded-sm focus:outline-none disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground',
                         isInformation ? 'right-5 top-5' : 'right-6 top-6'
                     )}>
                         <X className="h-4 w-4" />

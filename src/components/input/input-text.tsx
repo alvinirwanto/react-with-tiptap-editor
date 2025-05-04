@@ -31,7 +31,6 @@ interface InputTextProps {
     fieldArrayLength?: number;
     max?: number;
     required?: boolean;
-    value?: string;
     readOnly?: boolean;
 }
 
@@ -60,7 +59,6 @@ export default function InputText({
     max,
     fieldArrayLength = 0,
     required,
-    value,
     readOnly
 }: Readonly<InputTextProps>) {
 
@@ -182,12 +180,21 @@ export default function InputText({
                     <FormLabel>
                         {label} {required && <span className='text-rose-500 text-base'>*</span>}
                     </FormLabel>
+                    {
+                        description && (
+                            <div className='mt-1'>
+                                <FormDescription className='text-xs'>
+                                    {description}
+                                </FormDescription>
+                            </div>
+                        )
+                    }
                     <FormControl>
                         <div className="relative flex items-center">
                             <Input
                                 {...field}
+                                autoFocus={false}
                                 step="any"
-                                value={value}
                                 onChange={(e) => {
                                     if (type === 'number') {
                                         handleChange(type, e);
@@ -261,13 +268,7 @@ export default function InputText({
                             }
                         </div>
                     </FormControl>
-                    {
-                        description && (
-                            <FormDescription className='text-xs'>
-                                {description}
-                            </FormDescription>
-                        )
-                    }
+
                     {
                         showError && (
                             <div className={cn(
