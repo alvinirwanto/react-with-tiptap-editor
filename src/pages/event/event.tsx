@@ -1,5 +1,6 @@
 import TitlePage from "@/components/title-page";
 import LayoutPage from "@/layout/layout-page";
+import TableDataEvent from "./table/table-data-event";
 
 export default function Event() {
     return (
@@ -8,7 +9,7 @@ export default function Event() {
                 <TitlePage title="Event" />
             }
         >
-            hello
+            <TableDataEvent /> 
         </LayoutPage>
     )
 }
