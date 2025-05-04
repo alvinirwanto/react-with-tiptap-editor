@@ -1,6 +1,5 @@
 import TitlePage from "@/components/title-page";
 import LayoutPage from "@/layout/layout-page";
-import TableDataDeviasi from "./table/table-data-deviasi";
 
 export default function Deviasi() {
     return (
@@ -9,7 +8,7 @@ export default function Deviasi() {
                 <TitlePage title="Deviasi" />
             }
         >
-            <TableDataDeviasi /> 
+            Hewllo
         </LayoutPage>
     )
 }
